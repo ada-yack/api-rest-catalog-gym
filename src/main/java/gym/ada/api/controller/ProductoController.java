@@ -2,8 +2,11 @@ package gym.ada.api.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import gym.ada.api.dto.ProductData;
 import gym.ada.api.model.Producto;
 import gym.ada.api.service.IProductoService;
 
@@ -53,6 +56,21 @@ private final IProductoService productoService;
     @PutMapping("/actualizaProducto/{id}")
     public Producto actualizar(@PathVariable Long id, @RequestBody Producto producto) {
         return productoService.actualizarProductos(id, producto);
+    }
+    
+    /**
+     * Endpoint para listar todos los productos con sus tallas e imágenes
+     * GET /api/productos
+     */
+    @GetMapping("listarProductoData")
+    public ResponseEntity<List<ProductData>> listarProductosData() {
+        List<ProductData> productos = productoService.obtenerTodosLosProductos();
+        
+        if (productos.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Retorna HTTP 204 si no hay productos
+        }
+        
+        return new ResponseEntity<>(productos, HttpStatus.OK); // Retorna HTTP 200 con la lista
     }
     
    

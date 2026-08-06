@@ -2,6 +2,7 @@ package gym.ada.api.service;
 
 import java.util.List;
 
+import gym.ada.api.dto.ProductData;
 import gym.ada.api.model.Producto;
 
 public interface IProductoService {
@@ -17,5 +18,8 @@ public interface IProductoService {
 	public Producto actualizarProductos(Long id, Producto producto);
 
 	public void eliminarProductos(Long id);
+	
+	//Proveniente de dto
+	public List<ProductData> obtenerTodosLosProductos();
 
 }

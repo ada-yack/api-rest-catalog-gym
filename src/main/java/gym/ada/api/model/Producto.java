@@ -3,6 +3,7 @@ package gym.ada.api.model;
 import lombok.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,7 +12,7 @@ import jakarta.validation.constraints.*;
 
 
 @Entity
-@Table(name = "productos") // ← genera getters, setters, toString, equals
+@Table(name = "productos")
 @NoArgsConstructor  // ← constructor vacío que necesita JPA
 @AllArgsConstructor // ← constructor con todos los campos
 public class Producto {
@@ -57,14 +58,14 @@ public class Producto {
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	@JsonIgnore
-			private List<Imagen> imagenes;
+			private Set<Imagen> imagenes;
 	
 	
 	@OneToMany(mappedBy = "producto",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	@JsonIgnore
-			private List<ProductoTalla> productoTallas;
+			private Set<ProductoTalla> productoTallas;
 
 
 	public Long getId() {
@@ -147,24 +148,26 @@ public class Producto {
 	}
 
 
-	public List<Imagen> getImagenes() {
+	public Set<Imagen> getImagenes() {
 		return imagenes;
 	}
 
 
-	public void setImagenes(List<Imagen> imagenes) {
+	public void setImagenes(Set<Imagen> imagenes) {
 		this.imagenes = imagenes;
 	}
 
 
-	public List<ProductoTalla> getProductoTallas() {
+	public Set<ProductoTalla> getProductoTallas() {
 		return productoTallas;
 	}
 
 
-	public void setProductoTallas(List<ProductoTalla> productoTallas) {
+	public void setProductoTallas(Set<ProductoTalla> productoTallas) {
 		this.productoTallas = productoTallas;
 	}
+
+
 
 
 	
