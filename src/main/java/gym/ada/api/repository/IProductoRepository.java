@@ -25,4 +25,15 @@ public interface IProductoRepository extends  JpaRepository <Producto, Long>{
 		       "LEFT JOIN FETCH pt.talla")
 		List<Producto> findAllConDetalles();
 	
+	
+	
+	@Query("""
+		    SELECT DISTINCT p FROM Producto p
+		    LEFT JOIN FETCH p.imagenes
+		    LEFT JOIN FETCH p.productoTallas pt
+		    LEFT JOIN FETCH pt.talla
+		    LEFT JOIN FETCH p.categoria
+		    WHERE p.activo = true
+		    """)
+		List<Producto> findByActivoTrueConDetalles();
 }

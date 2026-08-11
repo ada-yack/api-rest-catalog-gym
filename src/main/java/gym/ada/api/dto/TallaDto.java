@@ -6,14 +6,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+
 public class TallaDto {
 
 	private Long id;
     private String nombre;
     private int  stock;
-    
-    
 	public Long getId() {
 		return id;
 	}
@@ -32,6 +30,9 @@ public class TallaDto {
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
+    
+    
+	
     
 
 	

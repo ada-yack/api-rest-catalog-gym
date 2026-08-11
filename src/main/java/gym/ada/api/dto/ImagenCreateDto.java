@@ -4,33 +4,33 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
+public class ImagenCreateDto {
 
-public class ImagenDto {
-	
-	private Long id;
     private String url;
-    private boolean esPrincipal;
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+    private String publicId;
+    private Boolean esPrincipal;
 	public String getUrl() {
 		return url;
 	}
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	public boolean isEsPrincipal() {
+	public String getPublicId() {
+		return publicId;
+	}
+	public void setPublicId(String publicId) {
+		this.publicId = publicId;
+	}
+	public Boolean getEsPrincipal() {
 		return esPrincipal;
 	}
-	public void setEsPrincipal(boolean esPrincipal) {
+	public void setEsPrincipal(Boolean esPrincipal) {
 		this.esPrincipal = esPrincipal;
 	}
-    
-    
 
+    
+    
 }

@@ -26,8 +26,29 @@ public class ProductData {
 	
 	private BigDecimal precioTotal;
 	
+	private Long categoriaId;
+	
 	private String categoria;
 	
+	
+	public Long getCategoriaId() {
+		return categoriaId;
+	}
+
+	public void setCategoriaId(Long categoriaId) {
+		this.categoriaId = categoriaId;
+	}
+
+	private boolean activo;
+	
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
 	private List<TallaDto> tallas;
 	
 	private List<ImagenDto> imagenes;

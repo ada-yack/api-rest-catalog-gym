@@ -6,73 +6,116 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import gym.ada.api.dto.ProductCreateDto;
 import gym.ada.api.dto.ProductData;
-import gym.ada.api.model.Producto;
+import gym.ada.api.dto.ProductUpdateDto;
 import gym.ada.api.service.IProductoService;
 
 
 
-@RestController // responde con JSON automaticamente
+@RestController
 @RequestMapping("/api/productos")
 public class ProductoController {
-	
-private final IProductoService productoService;
-	
-	public ProductoController(IProductoService productoService) {
+
+    private final IProductoService productoService;
+
+    public ProductoController(IProductoService productoService) {
         this.productoService = productoService;
     }
-	
-	//LIST
-	
-    @GetMapping("/listProductos")
-    public List< Producto> listarTodos() {
-        return productoService.listarProductos();
-    }
-    
-    @GetMapping("/listProductActivos")
-    public List<Producto> listarActivos() {
-        return productoService.listarProductosActivos();
-    }
-    
-    //SEARCH
-    @GetMapping("/searchProducto/{id}")
-    public Producto buscarPorId(@PathVariable Long id) {
-        return productoService.buscarProductosPorId(id);
-    }
-    
-    //SAVE
-    @PostMapping("/saveProducto")
-    public Producto guardar(@RequestBody Producto producto) {
-        return productoService.guardarProductos(producto);
-    }
-    
-   //DELETE
-    @DeleteMapping("/deleteProducto/{id}")
-    public void eliminar(@PathVariable Long id) {
-    	productoService.eliminarProductos(id);
-    }
-    
-    //PUT
-    @PutMapping("/actualizaProducto/{id}")
-    public Producto actualizar(@PathVariable Long id, @RequestBody Producto producto) {
-        return productoService.actualizarProductos(id, producto);
-    }
-    
-    /**
-     * Endpoint para listar todos los productos con sus tallas e imágenes
-     * GET /api/productos
-     */
-    @GetMapping("listarProductoData")
-    public ResponseEntity<List<ProductData>> listarProductosData() {
-        List<ProductData> productos = productoService.obtenerTodosLosProductos();
-        
-        if (productos.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Retorna HTTP 204 si no hay productos
-        }
-        
-        return new ResponseEntity<>(productos, HttpStatus.OK); // Retorna HTTP 200 con la lista
-    }
-    
-   
 
+
+    // =========================================================
+    // LISTAR TODOS
+    // =========================================================
+
+    @GetMapping("/listarProductoData")
+    public ResponseEntity<List<ProductData>> listarTodos() {
+
+        List<ProductData> productos =
+                productoService.obtenerTodosLosProductos();
+
+        if (productos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(productos);
+    }
+
+
+    // =========================================================
+    // LISTAR PRODUCTOS ACTIVOS
+    // =========================================================
+
+    @GetMapping("/listarActivos")
+    public ResponseEntity<List<ProductData>> listarActivos() {
+
+        List<ProductData> productos =
+                productoService.listarProductosActivos();
+
+        if (productos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(productos);
+    }
+
+
+    // =========================================================
+    // CREAR PRODUCTO
+    // =========================================================
+
+    @PostMapping("/crear")
+    public ResponseEntity<ProductData> crearProducto(
+            @RequestBody ProductCreateDto dto) {
+
+        ProductData producto =
+                productoService.crearProducto(dto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(producto);
+    }
+
+
+    // =========================================================
+    // ACTUALIZAR PARCIALMENTE
+    // =========================================================
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductData> actualizarProducto(
+            @PathVariable Long id,
+            @RequestBody ProductUpdateDto dto) {
+
+        ProductData producto =
+                productoService.actualizarProductoParcial(id, dto);
+
+        return ResponseEntity.ok(producto);
+    }
+
+
+    // =========================================================
+    // DESACTIVAR PRODUCTO
+    // =========================================================
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> desactivarProducto(
+            @PathVariable Long id) {
+
+        productoService.desactivarProducto(id);
+
+        return ResponseEntity.noContent().build();
+    }
+ // =========================================================
+ // ACTIVAR PRODUCTO
+ // =========================================================
+
+ @PatchMapping("/{id}/activar")
+ public ResponseEntity<ProductData> activarProducto(
+         @PathVariable Long id) {
+
+     ProductData producto =
+             productoService.activarProducto(id);
+
+     return ResponseEntity.ok(producto);
+ }
 }

@@ -19,7 +19,7 @@ public class Talla {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="talla_id")
-	private long id;
+	private Long id;
 	
 	
 	@Column(length = 10, nullable = false, unique = true)
@@ -32,12 +32,6 @@ public class Talla {
 	@OneToMany(mappedBy = "talla")
 	private List<ProductoTalla> productoTallas;
 
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -45,6 +39,22 @@ public class Talla {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<ProductoTalla> getProductoTallas() {
+		return productoTallas;
+	}
+
+	public void setProductoTallas(List<ProductoTalla> productoTallas) {
+		this.productoTallas = productoTallas;
 	}
 
 

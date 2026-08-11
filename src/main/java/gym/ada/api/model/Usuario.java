@@ -14,13 +14,11 @@ public class Usuario {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
 	private long id;
 	
 	@Column(length = 100, nullable = false)
 	@Size(max = 100)
 	@NotBlank
-
 	private String nombre;
 	
 	@Column(length = 150, unique = true, nullable = false)

@@ -2,6 +2,7 @@ package gym.ada.api.model;
 
 import lombok.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -54,18 +55,22 @@ public class Producto {
 	private Categoria categoria;
 	
 	
-	@OneToMany(mappedBy = "producto",
-			cascade = CascadeType.ALL,
-			orphanRemoval = true)
+	@OneToMany(
+	        mappedBy = "producto",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	)
 	@JsonIgnore
-			private Set<Imagen> imagenes;
-	
-	
-	@OneToMany(mappedBy = "producto",
-			cascade = CascadeType.ALL,
-			orphanRemoval = true)
+	private Set<Imagen> imagenes = new HashSet<>();
+
+
+	@OneToMany(
+	        mappedBy = "producto",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	)
 	@JsonIgnore
-			private Set<ProductoTalla> productoTallas;
+	private Set<ProductoTalla> productoTallas = new HashSet<>();
 
 
 	public Long getId() {
