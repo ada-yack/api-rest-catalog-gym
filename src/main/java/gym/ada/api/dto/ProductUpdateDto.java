@@ -3,6 +3,12 @@ package gym.ada.api.dto;
 import java.math.BigDecimal;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductUpdateDto {
 
 	private Long id;

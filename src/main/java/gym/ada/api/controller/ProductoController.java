@@ -4,17 +4,20 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import gym.ada.api.dto.ProductCreateDto;
 import gym.ada.api.dto.ProductData;
 import gym.ada.api.dto.ProductUpdateDto;
 import gym.ada.api.service.IProductoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 
 @RestController
 @RequestMapping("/api/productos")
+@SecurityRequirement(name = "Bearer Authentication")
 public class ProductoController {
 
     private final IProductoService productoService;
