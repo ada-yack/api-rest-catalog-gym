@@ -1,12 +1,12 @@
 package gym.ada.api.service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import gym.ada.api.dto.ProductCreateDto;
 import gym.ada.api.dto.ProductData;
 import gym.ada.api.dto.ProductUpdateDto;
-import gym.ada.api.model.Producto;
+
 
 public interface IProductoService {
 

@@ -11,7 +11,15 @@ public class ImagenDto {
 	
 	private Long id;
     private String url;
-    private boolean esPrincipal;
+    private String publicId;
+    public String getPublicId() {
+		return publicId;
+	}
+	public void setPublicId(String publicId) {
+		this.publicId = publicId;
+	}
+	private boolean esPrincipal;
+    
 	public Long getId() {
 		return id;
 	}

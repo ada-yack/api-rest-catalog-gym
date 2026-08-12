@@ -25,6 +25,7 @@ import gym.ada.api.repository.IImagenRepository;
 import gym.ada.api.repository.IProductoRepository;
 import gym.ada.api.repository.IProductoTallaRepository;
 import gym.ada.api.repository.ITallaRepository;
+import gym.ada.api.service.ICloudinaryService;
 import gym.ada.api.service.IProductoService;
 import jakarta.transaction.Transactional;
 
@@ -37,19 +38,23 @@ public class ProductoServiceImplement implements IProductoService {
     private final ITallaRepository tallaRepository;
     private final IProductoTallaRepository productoTallaRepository;
     private final IImagenRepository imagenRepository;
+    private final ICloudinaryService cloudinaryService;
+    
 
     public ProductoServiceImplement(
             IProductoRepository productoRepository,
             ICategoriaRepository categoriaRepository,
             ITallaRepository tallaRepository,
             IProductoTallaRepository productoTallaRepository,
-            IImagenRepository imagenRepository) {
+            IImagenRepository imagenRepository,
+            ICloudinaryService cloudinaryService) {
 
         this.productoRepository = productoRepository;
         this.categoriaRepository = categoriaRepository;
         this.tallaRepository = tallaRepository;
         this.productoTallaRepository = productoTallaRepository;
         this.imagenRepository = imagenRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
 
@@ -269,7 +274,18 @@ public class ProductoServiceImplement implements IProductoService {
             producto.getImagenes().removeIf(imagen -> {
                 boolean debePermanecer = idsRecibidos.contains(imagen.getId());
                 if (!debePermanecer) {
+
+                    System.out.println("=================================");
+                    System.out.println("ELIMINANDO IMAGEN");
+                    System.out.println("ID DB: " + imagen.getId());
+                    System.out.println("PUBLIC ID: " + imagen.getPublicId());
+                    System.out.println("URL: " + imagen.getUrl());
+                    System.out.println("=================================");
+
+                    cloudinaryService.eliminarImagen(imagen.getPublicId());
+
                     imagenRepository.delete(imagen);
+
                     return true;
                 }
                 return false;
@@ -435,15 +451,14 @@ public class ProductoServiceImplement implements IProductoService {
                         .stream()
                         .map(img -> {
 
-                            ImagenDto imgDto = new ImagenDto();
+                        	ImagenDto imgDto = new ImagenDto();
 
-                            imgDto.setId(img.getId());
-                            imgDto.setUrl(img.getUrl());
-                            imgDto.setEsPrincipal(
-                                    img.isEsPrincipal()
-                            );
-
-                            return imgDto;
+                        	imgDto.setId(img.getId());
+                        	imgDto.setUrl(img.getUrl());
+                        	imgDto.setPublicId(img.getPublicId());
+                        	imgDto.setEsPrincipal(img.isEsPrincipal());
+                           
+                        	return imgDto;
 
                         })
                         .collect(Collectors.toList());
