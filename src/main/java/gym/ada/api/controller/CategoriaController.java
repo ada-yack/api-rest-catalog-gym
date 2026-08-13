@@ -6,12 +6,14 @@ import org.springframework.web.bind.annotation.*;
 
 import gym.ada.api.model.Categoria;
 import gym.ada.api.service.ICategoriaService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 
 
 @RestController // responde con JSON automaticamente
 @RequestMapping("/api/categorias")
+@SecurityRequirement(name = "Bearer Authentication")
 public class CategoriaController {
 	
 	private ICategoriaService categoriaService;
