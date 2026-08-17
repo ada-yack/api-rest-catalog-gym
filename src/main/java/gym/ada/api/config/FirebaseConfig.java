@@ -1,9 +1,8 @@
 package gym.ada.api.config;
 
-
-
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,17 +22,23 @@ public class FirebaseConfig {
             return FirebaseApp.getInstance();
         }
 
-        FileInputStream serviceAccount =
-                new FileInputStream(
-                    "src/main/java/gym/ada/api/security/firebase/firebase-service-account.json"
-                );
+        String firebaseJson = System.getenv("FIREBASE_SERVICE_ACCOUNT");
 
-        FirebaseOptions options =
-                FirebaseOptions.builder()
-                    .setCredentials(
-                        GoogleCredentials.fromStream(serviceAccount)
+        if (firebaseJson == null || firebaseJson.isBlank()) {
+            throw new IllegalStateException(
+                "No se encontró la variable FIREBASE_SERVICE_ACCOUNT"
+            );
+        }
+
+        FirebaseOptions options = FirebaseOptions.builder()
+                .setCredentials(
+                    GoogleCredentials.fromStream(
+                        new ByteArrayInputStream(
+                            firebaseJson.getBytes(StandardCharsets.UTF_8)
+                        )
                     )
-                    .build();
+                )
+                .build();
 
         return FirebaseApp.initializeApp(options);
     }
