@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gym.ada.api.dto.UsuarioDto;
+import gym.ada.api.dto.Auth.GoogleLoginDto;
 import gym.ada.api.dto.Auth.LoginResponseDto;
 import gym.ada.api.dto.Auth.LoginUsuarioDto;
 import gym.ada.api.dto.Auth.RegistroUsuarioDto;
@@ -40,6 +41,15 @@ public class AuthController {
 
         return ResponseEntity.ok(
                 usuarioService.login(dto)
+        );
+    }
+    
+    @PostMapping("/google")
+    public ResponseEntity<LoginResponseDto> loginGoogle(
+            @Valid @RequestBody GoogleLoginDto dto) {
+
+        return ResponseEntity.ok(
+                usuarioService.loginGoogle(dto.getToken())
         );
     }
 }

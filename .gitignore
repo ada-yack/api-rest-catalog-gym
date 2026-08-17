@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### CODE FIREBASE ###
+src/main/java/gym/ada/api/security/firebase/firebase-service-account.json
+

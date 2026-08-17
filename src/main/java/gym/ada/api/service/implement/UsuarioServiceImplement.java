@@ -14,22 +14,28 @@ import gym.ada.api.model.Usuario;
 import gym.ada.api.repository.IUsuarioRepository;
 import gym.ada.api.security.JwtService;
 
+import com.google.firebase.auth.FirebaseToken;
+import gym.ada.api.security.firebase.FirebaseService;
+
 @Service
 public class UsuarioServiceImplement {
 
     private final IUsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final FirebaseService firebaseService;
 
 
     public UsuarioServiceImplement(
             IUsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService) {
+            JwtService jwtService,
+            FirebaseService firebaseService) {
 
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.firebaseService = firebaseService;
     }
 
     // ==========================================
@@ -157,5 +163,96 @@ public class UsuarioServiceImplement {
         dto.setAvatarUrl(usuario.getAvatarUrl());
 
         return dto;
+    }
+    
+    public LoginResponseDto loginGoogle(String token) {
+
+        // ==========================================
+        // 1. VERIFICAR TOKEN CON FIREBASE
+        // ==========================================
+
+        FirebaseToken firebaseToken =
+                firebaseService.verificarToken(token);
+
+
+        // ==========================================
+        // 2. DATOS DE FIREBASE
+        // ==========================================
+
+        String email = firebaseToken.getEmail();
+        String nombre = firebaseToken.getName();
+        String avatarUrl = firebaseToken.getPicture();
+
+
+        // ==========================================
+        // 3. BUSCAR USUARIO EN MYSQL
+        // ==========================================
+
+        Usuario usuario =
+                usuarioRepository.findByEmail(email)
+                        .orElse(null);
+
+
+        // ==========================================
+        // 4. SI NO EXISTE → CREAR CLIENTE
+        // ==========================================
+
+        if (usuario == null) {
+
+            usuario = new Usuario();
+
+            usuario.setNombre(nombre);
+            usuario.setEmail(email);
+
+            // Google maneja la contraseña
+            usuario.setPasswordHash(null);
+
+            usuario.setActivo(true);
+
+            // Todo usuario nuevo de Google será CLIENTE
+            usuario.setRol(Rol.CLIENTE);
+
+            usuario.setAvatarUrl(avatarUrl);
+
+            usuario = usuarioRepository.save(usuario);
+        }
+
+
+        // ==========================================
+        // 5. VERIFICAR QUE ESTÉ ACTIVO
+        // ==========================================
+
+        if (!usuario.isActivo()) {
+            throw new RuntimeException("Usuario inactivo");
+        }
+
+
+        // ==========================================
+        // 6. GENERAR NUESTRO JWT
+        // ==========================================
+
+        String jwt =
+                jwtService.generarToken(
+                        usuario.getEmail(),
+                        usuario.getRol()
+                );
+
+
+        // ==========================================
+        // 7. CONVERTIR USUARIO A DTO
+        // ==========================================
+
+        UsuarioDto usuarioDto =
+                convertirAUsuarioDto(usuario);
+
+
+        // ==========================================
+        // 8. DEVOLVER LA MISMA RESPUESTA
+        // ==========================================
+
+        return new LoginResponseDto(
+                jwt,
+                usuarioDto
+        );
     }
 }

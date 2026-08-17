@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
 
+import gym.ada.api.dto.CategoriaCreateDto;
+import gym.ada.api.dto.CategoriaDto;
 import gym.ada.api.model.Categoria;
 import gym.ada.api.service.ICategoriaService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -47,6 +49,41 @@ public class CategoriaController {
     	categoriaService.eliminarCategoria(id);
     }
     
+    
+
+    // =========================================================
+    // LISTAR CATEGORÍAS
+    // GET /api/categorias/listarCategorias
+    // =========================================================
+
+    @GetMapping("/listarCategorias")
+    public List<CategoriaDto> listarCategorias() {
+        return categoriaService.vizualizarCategoria();
+    }
+
+
+    // =========================================================
+    // CREAR CATEGORÍA
+    // POST /api/categorias/crearCategoria
+    // =========================================================
+
+    @PostMapping("/crearCategoria")
+    public CategoriaDto crearCategoria(@RequestBody CategoriaCreateDto dto) {
+
+        return categoriaService.crearCategoria(dto);
+    }
+
+
+    // =========================================================
+    // ELIMINAR CATEGORÍA
+    // DELETE /api/categorias/eliminarCategoria/{id}
+    // =========================================================
+
+    @DeleteMapping("/eliminarCategoria/{id}")
+    public void eliminarCategoria(@PathVariable Long id) {
+
+        categoriaService.quitarCategoria(id);
+    }
    
 
 }
