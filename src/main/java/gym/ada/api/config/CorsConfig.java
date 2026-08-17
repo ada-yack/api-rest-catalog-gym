@@ -19,6 +19,7 @@ public class CorsConfig {
         	    "http://localhost:4200",
         	    "https://bloodcmen-droid.github.io",
         	    "https://api-rest-gyselmood-production.up.railway.app",
+        	    "https://gyselmood.netlify.app",
         	    "http://localhost:5500",
         	    "http://127.0.0.1:5500",
         	    "http://localhost:5501",
