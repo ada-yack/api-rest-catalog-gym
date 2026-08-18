@@ -1,4 +1,4 @@
-package gym.ada.api.controller;
+package gym.ada.api.controller.test;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
