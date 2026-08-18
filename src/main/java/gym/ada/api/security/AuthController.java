@@ -37,13 +37,16 @@ public class AuthController {
     
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(
-             @RequestBody LoginUsuarioDto dto) {
+            @RequestBody LoginUsuarioDto dto) {
+
+        System.out.println("🔥🔥🔥 ENTRO A AUTHCONTROLLER /login");
+        System.out.println("EMAIL = " + dto.getEmail());
+        System.out.println("PASSWORD NULL = " + (dto.getPassword() == null));
 
         return ResponseEntity.ok(
                 usuarioService.login(dto)
         );
     }
-    
     @PostMapping("/google")
     public ResponseEntity<LoginResponseDto> loginGoogle(
             @Valid @RequestBody GoogleLoginDto dto) {
@@ -52,6 +55,6 @@ public class AuthController {
                 usuarioService.loginGoogle(dto.getToken())
         );
     }
-    
+    //
     
 }
