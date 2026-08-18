@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 @RestController
-@RequestMapping("/api/productos")
+@RequestMapping("/api/productos" )
 @SecurityRequirement(name = "Bearer Authentication")
 public class ProductoController {
 
@@ -31,7 +31,7 @@ public class ProductoController {
     // LISTAR TODOS
     // =========================================================
 
-    @GetMapping("/listarProductoData")
+    @GetMapping(value = "/listarProductoData", produces = "application/json")
     public ResponseEntity<List<ProductData>> listarTodos() {
 
         List<ProductData> productos =
@@ -49,7 +49,7 @@ public class ProductoController {
     // LISTAR PRODUCTOS ACTIVOS
     // =========================================================
 
-    @GetMapping("/listarActivos")
+    @GetMapping(value ="/listarActivos", produces = "application/json")
     public ResponseEntity<List<ProductData>> listarActivos() {
 
         List<ProductData> productos =
@@ -67,7 +67,7 @@ public class ProductoController {
     // CREAR PRODUCTO
     // =========================================================
 
-    @PostMapping("/crear")
+    @PostMapping(value = "/crear", produces = "application/json")
     public ResponseEntity<ProductData> crearProducto(
             @RequestBody ProductCreateDto dto) {
 
@@ -84,7 +84,7 @@ public class ProductoController {
     // ACTUALIZAR PARCIALMENTE
     // =========================================================
 
-    @PatchMapping("/{id}")
+    @PatchMapping(value = "/{id}" , produces = "application/json")
     public ResponseEntity<ProductData> actualizarProducto(
             @PathVariable Long id,
             @RequestBody ProductUpdateDto dto) {
@@ -100,7 +100,7 @@ public class ProductoController {
     // DESACTIVAR PRODUCTO
     // =========================================================
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Void> desactivarProducto(
             @PathVariable Long id) {
 
@@ -112,7 +112,7 @@ public class ProductoController {
  // ACTIVAR PRODUCTO
  // =========================================================
 
- @PatchMapping("/{id}/activar")
+ @PatchMapping(value = "/{id}/activar" , produces = "application/json")
  public ResponseEntity<ProductData> activarProducto(
          @PathVariable Long id) {
 
