@@ -52,4 +52,18 @@ public class AuthController {
                 usuarioService.loginGoogle(dto.getToken())
         );
     }
+    
+    @PostMapping("/login-debug")
+    public ResponseEntity<?> loginDebug(
+            @RequestBody LoginUsuarioDto dto) {
+
+        System.out.println("========== LOGIN DEBUG ==========");
+        System.out.println("EMAIL: " + dto.getEmail());
+        System.out.println("PASSWORD RECIBIDA: " + dto.getPassword());
+        System.out.println("=================================");
+
+        return ResponseEntity.ok(
+                "CONTROLLER_OK"
+        );
+    }
 }
