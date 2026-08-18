@@ -19,7 +19,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -27,33 +26,82 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
+        System.out.println("====================================");
+        System.out.println("🔥 JWT FILTER");
+        System.out.println("Método: " + request.getMethod());
+        System.out.println("URI: " + request.getRequestURI());
+        System.out.println(
+            "Authorization: " +
+            request.getHeader("Authorization")
+        );
+
         String authorizationHeader =
                 request.getHeader("Authorization");
 
-        // No hay token
         if (authorizationHeader == null ||
             !authorizationHeader.startsWith("Bearer ")) {
 
+            System.out.println(
+                "🟢 JWT → SIN TOKEN → filterChain.doFilter()"
+            );
+
             filterChain.doFilter(request, response);
+
+            System.out.println(
+                "🟢 JWT → REGRESÓ DEL filterChain"
+            );
+
+            System.out.println(
+                "Status actual: " +
+                response.getStatus()
+            );
+
+            System.out.println("====================================");
+
             return;
         }
+
+        System.out.println(
+            "🟡 JWT → ENCONTRÓ BEARER"
+        );
 
         String token =
                 authorizationHeader.substring(7);
 
         try {
 
-            String email = jwtService.obtenerEmail(token);
-            String rol = jwtService.obtenerRol(token);
+            System.out.println(
+                "🟡 JWT → intentando validar token"
+            );
+
+            String email =
+                    jwtService.obtenerEmail(token);
+
+            String rol =
+                    jwtService.obtenerRol(token);
+
+            System.out.println(
+                "🟢 JWT → token válido"
+            );
+
+            System.out.println(
+                "Email: " + email
+            );
+
+            System.out.println(
+                "Rol: " + rol
+            );
 
             SimpleGrantedAuthority authority =
-                    new SimpleGrantedAuthority("ROLE_" + rol);
+                    new SimpleGrantedAuthority(
+                        "ROLE_" + rol
+                    );
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
-                            email,
-                            null,
-                            java.util.List.of(authority)
+                        email,
+                        null,
+                        java.util.List.of(authority)
                     );
 
             SecurityContextHolder
@@ -62,10 +110,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
 
-            // Token inválido → simplemente no autenticamos
+            System.out.println(
+                "🔴 JWT → TOKEN INVÁLIDO"
+            );
+
+            System.out.println(
+                "Error: " + e.getClass().getName()
+            );
+
+            System.out.println(
+                "Mensaje: " + e.getMessage()
+            );
+
             SecurityContextHolder.clearContext();
         }
 
+        System.out.println(
+            "➡️ JWT → pasando al siguiente filtro"
+        );
+
         filterChain.doFilter(request, response);
+
+        System.out.println(
+            "⬅️ JWT → regresó del siguiente filtro"
+        );
+
+        System.out.println(
+            "Status final: " +
+            response.getStatus()
+        );
+
+        System.out.println("====================================");
     }
 }
