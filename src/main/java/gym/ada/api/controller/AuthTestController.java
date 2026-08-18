@@ -1,7 +1,9 @@
 package gym.ada.api.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,4 +30,17 @@ public class AuthTestController {
 
         return "AUTH_POST_OK";
     }
+    
+    @PostMapping("/login-debug")
+    public ResponseEntity<String> loginDebug(
+            @RequestBody String body) {
+
+        System.out.println("================================");
+        System.out.println("🔥 LOGIN DEBUG LLEGO AL CONTROLLER");
+        System.out.println("BODY: " + body);
+        System.out.println("================================");
+
+        return ResponseEntity.ok("LOGIN_DEBUG_OK");
+    }
+    
 }
