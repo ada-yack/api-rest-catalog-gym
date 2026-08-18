@@ -18,7 +18,7 @@ public class PruebaLoginController {
         this.usuarioService = usuarioService;
     }
 
-    @PostMapping
+    @PostMapping("/login-direct")
     public LoginResponseDto login(
             @RequestBody LoginUsuarioDto dto) {
 
@@ -27,4 +27,7 @@ public class PruebaLoginController {
 
         return usuarioService.login(dto);
     }
+    
+    
 }
+//ola
