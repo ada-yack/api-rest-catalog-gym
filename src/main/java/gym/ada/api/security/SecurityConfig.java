@@ -1,5 +1,7 @@
 package gym.ada.api.security;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableMethodSecurity
@@ -27,6 +33,41 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration =
+                new CorsConfiguration();
+
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "https://gyselmood.netlify.app"
+        ));
+
+        configuration.setAllowedMethods(List.of(
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "OPTIONS"
+        ));
+
+        configuration.setAllowedHeaders(List.of("*"));
+
+        configuration.setAllowCredentials(false);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(
             HttpSecurity http) throws Exception {
 
@@ -34,22 +75,9 @@ public class SecurityConfig {
                 new JwtAuthenticationFilter(jwtService);
 
         http
-
-            // ==========================================
-            // CORS
-            // ==========================================
-
-            .cors(cors -> {})
-
-            // ==========================================
-            // CSRF
-            // ==========================================
-
             .csrf(csrf -> csrf.disable())
 
-            // ==========================================
-            // SESIONES
-            // ==========================================
+            .cors(cors -> {})
 
             .sessionManagement(session ->
                 session.sessionCreationPolicy(
@@ -57,15 +85,7 @@ public class SecurityConfig {
                 )
             )
 
-            // ==========================================
-            // AUTORIZACIONES
-            // ==========================================
-
             .authorizeHttpRequests(auth -> auth
-
-                // ==========================================
-                // PÚBLICO
-                // ==========================================
 
                 .requestMatchers(
                     "/api/auth/**",
@@ -73,123 +93,10 @@ public class SecurityConfig {
                     "/v3/api-docs/**"
                 ).permitAll()
 
-
-                // ==========================================
-                // PRODUCTOS → PÚBLICO
-                // ==========================================
-
-                .requestMatchers(
-                    HttpMethod.GET,
-                    "/api/productos/listarProductoData",
-                    "/api/productos/listarActivos"
-                ).permitAll()
-
-
-                // ==========================================
-                // CATEGORÍAS → PÚBLICO
-                // ==========================================
-
-                .requestMatchers(
-                    HttpMethod.GET,
-                    "/api/categorias/**"
-                ).permitAll()
-
-
-                // ==========================================
-                // TALLAS → PÚBLICO
-                // ==========================================
-
-                .requestMatchers(
-                    HttpMethod.GET,
-                    "/api/tallas/**"
-                ).permitAll()
-
-
-                // ==========================================
-                // IMÁGENES → PÚBLICO
-                // ==========================================
-
-                .requestMatchers(
-                    HttpMethod.GET,
-                    "/api/imagenes/**"
-                ).permitAll()
-
-
-                // ==========================================
-                // PRODUCTOS → ADMIN
-                // ==========================================
-
-                .requestMatchers(
-                    HttpMethod.POST,
-                    "/api/productos/**"
-                ).hasRole("ADMIN")
-
-                .requestMatchers(
-                    HttpMethod.PATCH,
-                    "/api/productos/**"
-                ).hasRole("ADMIN")
-
-                .requestMatchers(
-                    HttpMethod.DELETE,
-                    "/api/productos/**"
-                ).hasRole("ADMIN")
-
-
-                // ==========================================
-                // CATEGORÍAS → ADMIN
-                // ==========================================
-
-                .requestMatchers(
-                    HttpMethod.POST,
-                    "/api/categorias/**"
-                ).hasRole("ADMIN")
-
-                .requestMatchers(
-                    HttpMethod.DELETE,
-                    "/api/categorias/**"
-                ).hasRole("ADMIN")
-
-
-                // ==========================================
-                // TALLAS → ADMIN
-                // ==========================================
-
-                .requestMatchers(
-                    HttpMethod.POST,
-                    "/api/tallas/**"
-                ).hasRole("ADMIN")
-
-                .requestMatchers(
-                    HttpMethod.DELETE,
-                    "/api/tallas/**"
-                ).hasRole("ADMIN")
-
-
-                // ==========================================
-                // IMÁGENES → ADMIN
-                // ==========================================
-
-                .requestMatchers(
-                    HttpMethod.POST,
-                    "/api/imagenes/**"
-                ).hasRole("ADMIN")
-
-                .requestMatchers(
-                    HttpMethod.DELETE,
-                    "/api/imagenes/**"
-                ).hasRole("ADMIN")
-
-
-                // ==========================================
-                // TODO LO DEMÁS
-                // ==========================================
+                // tus demás reglas...
 
                 .anyRequest().authenticated()
             )
-
-            // ==========================================
-            // JWT
-            // ==========================================
 
             .addFilterBefore(
                 jwtFilter,

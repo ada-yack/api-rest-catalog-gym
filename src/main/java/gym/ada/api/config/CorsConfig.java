@@ -1,4 +1,4 @@
-package gym.ada.api.config;
+/*package gym.ada.api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,4 +42,4 @@ public class CorsConfig {
 
         return source;
     }
-}
+} */
