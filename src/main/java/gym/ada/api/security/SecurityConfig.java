@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -93,13 +93,39 @@ public class SecurityConfig {
             			    "/v3/api-docs/**"
             			).permitAll()
 
-            	.anyRequest().permitAll()
-            );
+            		.requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-            /*.addFilterBefore(
+            		.requestMatchers(HttpMethod.GET,
+            		    "/api/productos/listarProductoData",
+            		    "/api/productos/listarActivos",
+            		    "/api/categorias/**",
+            		    "/api/tallas/**",
+            		    "/api/imagenes/**"                 //recuperacion de esta vaina
+            		).permitAll()
+
+            		.requestMatchers(HttpMethod.POST,
+            		    "/api/productos/**",
+            		    "/api/categorias/**",
+            		    "/api/tallas/**",
+            		    "/api/imagenes/**"
+            		).hasRole("ADMIN")
+
+            		.requestMatchers(HttpMethod.PATCH, "/api/productos/**").hasRole("ADMIN")
+
+            		.requestMatchers(HttpMethod.DELETE,
+            		    "/api/productos/**",
+            		    "/api/categorias/**",
+            		    "/api/tallas/**",
+            		    "/api/imagenes/**"
+            		).hasRole("ADMIN")
+
+            		.anyRequest().authenticated()
+            )
+
+           .addFilterBefore(
                 jwtFilter,
-                UsernamePasswordAuthenticationFilter.class
-            );*/
+                UsernamePasswordAuthenticationFilter.class //filtro 
+            );
 
         return http.build();
     }
