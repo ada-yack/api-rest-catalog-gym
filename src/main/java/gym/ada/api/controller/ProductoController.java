@@ -3,6 +3,7 @@ package gym.ada.api.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,8 @@ public class ProductoController {
     // LISTAR TODOS
     // =========================================================
 
-    @GetMapping(value = "/listarProductoData", produces = "application/json")
+    @GetMapping(value = "/listarProductoData", produces = MediaType.APPLICATION_JSON_VALUE
+    		)
     public ResponseEntity<List<ProductData>> listarTodos() {
 
         List<ProductData> productos =
@@ -49,7 +51,7 @@ public class ProductoController {
     // LISTAR PRODUCTOS ACTIVOS
     // =========================================================
 
-    @GetMapping(value ="/listarActivos", produces = "application/json")
+    @GetMapping(value ="/listarActivos",  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ProductData>> listarActivos() {
 
         List<ProductData> productos =
@@ -67,7 +69,7 @@ public class ProductoController {
     // CREAR PRODUCTO
     // =========================================================
 
-    @PostMapping(value = "/crear", produces = "application/json")
+    @PostMapping(value = "/crear",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductData> crearProducto(
             @RequestBody ProductCreateDto dto) {
 
@@ -84,7 +86,7 @@ public class ProductoController {
     // ACTUALIZAR PARCIALMENTE
     // =========================================================
 
-    @PatchMapping(value = "/{id}" , produces = "application/json")
+    @PatchMapping(value = "/{id}" , produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductData> actualizarProducto(
             @PathVariable Long id,
             @RequestBody ProductUpdateDto dto) {
@@ -100,7 +102,7 @@ public class ProductoController {
     // DESACTIVAR PRODUCTO
     // =========================================================
 
-    @DeleteMapping(value = "/{id}", produces = "application/json")
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> desactivarProducto(
             @PathVariable Long id) {
 
@@ -112,7 +114,7 @@ public class ProductoController {
  // ACTIVAR PRODUCTO
  // =========================================================
 
- @PatchMapping(value = "/{id}/activar" , produces = "application/json")
+ @PatchMapping(value = "/{id}/activar" , produces = MediaType.APPLICATION_JSON_VALUE)
  public ResponseEntity<ProductData> activarProducto(
          @PathVariable Long id) {
 
