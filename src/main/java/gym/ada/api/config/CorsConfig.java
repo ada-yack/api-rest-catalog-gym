@@ -3,8 +3,8 @@ package gym.ada.api.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -12,29 +12,34 @@ import java.util.List;
 public class CorsConfig {
 
     @Bean
-    public CorsFilter corsFilter() {
+    public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-        	    "http://localhost:4200",
-        	    "https://bloodcmen-droid.github.io",
-        	    "https://api-rest-gyselmood-production.up.railway.app",
-        	    "https://gyselmood.netlify.app",
-        	    "http://localhost:5500",
-        	    "http://127.0.0.1:5500",
-        	    "http://localhost:5501",
-        	    "http://127.0.0.1:5501",
-        	    "http://localhost:8000",
-        	    "http://127.0.0.1:8000"
-        	));
+            "http://localhost:4200",
+            "https://gyselmood.netlify.app",
+            "https://bloodcmen-droid.github.io"
+        ));
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedMethods(List.of(
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "OPTIONS"
+        ));
+
         config.setAllowedHeaders(List.of("*"));
+
         config.setAllowCredentials(false);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
 
-        return new CorsFilter(source);
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
     }
 }

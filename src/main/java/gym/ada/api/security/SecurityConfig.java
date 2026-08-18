@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableMethodSecurity
@@ -35,141 +34,162 @@ public class SecurityConfig {
                 new JwtAuthenticationFilter(jwtService);
 
         http
-        .csrf(csrf -> csrf.disable())
 
-        .cors(cors -> {})
+            // ==========================================
+            // CORS
+            // ==========================================
 
-        .sessionManagement(session ->
-            session.sessionCreationPolicy(
-                SessionCreationPolicy.STATELESS
+            .cors(cors -> {})
+
+            // ==========================================
+            // CSRF
+            // ==========================================
+
+            .csrf(csrf -> csrf.disable())
+
+            // ==========================================
+            // SESIONES
+            // ==========================================
+
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(
+                    SessionCreationPolicy.STATELESS
+                )
             )
-        )
+
+            // ==========================================
+            // AUTORIZACIONES
+            // ==========================================
 
             .authorizeHttpRequests(auth -> auth
 
-            	    // ==========================================
-            	    // PÚBLICO
-            	    // ==========================================
+                // ==========================================
+                // PÚBLICO
+                // ==========================================
 
-            	    .requestMatchers(
-            	        "/api/auth/**",
-            	        "/swagger-ui/**",
-            	        "/v3/api-docs/**"
-            	    ).permitAll()
-
-
-            	    // ==========================================
-            	    // PRODUCTOS → PÚBLICO
-            	    // ==========================================
-
-            	    .requestMatchers(
-            	        HttpMethod.GET,
-            	        "/api/productos/listarProductoData",
-            	        "/api/productos/listarActivos"
-            	    ).permitAll()
+                .requestMatchers(
+                    "/api/auth/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**"
+                ).permitAll()
 
 
-            	    // ==========================================
-            	    // CATEGORÍAS → PÚBLICO PARA CONSULTAR
-            	    // ==========================================
+                // ==========================================
+                // PRODUCTOS → PÚBLICO
+                // ==========================================
 
-            	    .requestMatchers(
-            	        HttpMethod.GET,
-            	        "/api/categorias/**"
-            	    ).permitAll()
-
-
-            	    // ==========================================
-            	    // TALLAS → PÚBLICO PARA CONSULTAR
-            	    // ==========================================
-
-            	    .requestMatchers(
-            	        HttpMethod.GET,
-            	        "/api/tallas/**"
-            	    ).permitAll()
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/productos/listarProductoData",
+                    "/api/productos/listarActivos"
+                ).permitAll()
 
 
-            	    // ==========================================
-            	    // IMÁGENES → PÚBLICO PARA CONSULTAR
-            	    // ==========================================
+                // ==========================================
+                // CATEGORÍAS → PÚBLICO
+                // ==========================================
 
-            	    .requestMatchers(
-            	        HttpMethod.GET,
-            	        "/api/imagenes/**"
-            	    ).permitAll()
-
-
-            	    // ==========================================
-            	    // PRODUCTOS → SOLO ADMIN
-            	    // ==========================================
-
-            	    .requestMatchers(
-            	        HttpMethod.POST,
-            	        "/api/productos/**"
-            	    ).hasRole("ADMIN")
-
-            	    .requestMatchers(
-            	        HttpMethod.PATCH,
-            	        "/api/productos/**"
-            	    ).hasRole("ADMIN")
-
-            	    .requestMatchers(
-            	        HttpMethod.DELETE,
-            	        "/api/productos/**"
-            	    ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/categorias/**"
+                ).permitAll()
 
 
-            	    // ==========================================
-            	    // CATEGORÍAS → SOLO ADMIN
-            	    // ==========================================
+                // ==========================================
+                // TALLAS → PÚBLICO
+                // ==========================================
 
-            	    .requestMatchers(
-            	        HttpMethod.POST,
-            	        "/api/categorias/**"
-            	    ).hasRole("ADMIN")
-
-            	    .requestMatchers(
-            	        HttpMethod.DELETE,
-            	        "/api/categorias/**"
-            	    ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/tallas/**"
+                ).permitAll()
 
 
-            	    // ==========================================
-            	    // TALLAS → SOLO ADMIN
-            	    // ==========================================
+                // ==========================================
+                // IMÁGENES → PÚBLICO
+                // ==========================================
 
-            	    .requestMatchers(
-            	        HttpMethod.POST,
-            	        "/api/tallas/**"
-            	    ).hasRole("ADMIN")
-
-            	    .requestMatchers(
-            	        HttpMethod.DELETE,
-            	        "/api/tallas/**"
-            	    ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.GET,
+                    "/api/imagenes/**"
+                ).permitAll()
 
 
-            	    // ==========================================
-            	    // IMÁGENES → SOLO ADMIN PARA MODIFICAR
-            	    // ==========================================
+                // ==========================================
+                // PRODUCTOS → ADMIN
+                // ==========================================
 
-            	    .requestMatchers(
-            	        HttpMethod.POST,
-            	        "/api/imagenes/**"
-            	    ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/productos/**"
+                ).hasRole("ADMIN")
 
-            	    .requestMatchers(
-            	        HttpMethod.DELETE,
-            	        "/api/imagenes/**"
-            	    ).hasRole("ADMIN")
+                .requestMatchers(
+                    HttpMethod.PATCH,
+                    "/api/productos/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/productos/**"
+                ).hasRole("ADMIN")
 
 
-            	    // ==========================================
-            	    // TODO LO DEMÁS
-            	    // ==========================================
+                // ==========================================
+                // CATEGORÍAS → ADMIN
+                // ==========================================
 
-            	    .anyRequest().authenticated()
-            	)
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/categorias/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/categorias/**"
+                ).hasRole("ADMIN")
+
+
+                // ==========================================
+                // TALLAS → ADMIN
+                // ==========================================
+
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/tallas/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/tallas/**"
+                ).hasRole("ADMIN")
+
+
+                // ==========================================
+                // IMÁGENES → ADMIN
+                // ==========================================
+
+                .requestMatchers(
+                    HttpMethod.POST,
+                    "/api/imagenes/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                    HttpMethod.DELETE,
+                    "/api/imagenes/**"
+                ).hasRole("ADMIN")
+
+
+                // ==========================================
+                // TODO LO DEMÁS
+                // ==========================================
+
+                .anyRequest().authenticated()
+            )
+
+            // ==========================================
+            // JWT
+            // ==========================================
 
             .addFilterBefore(
                 jwtFilter,
